@@ -1,0 +1,25 @@
+name: Nightly rural‑health update
+on:
+  schedule:
+    - cron: '15 3 * * *'        # 03:15 UTC nightly
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt
+      - run: python src/fetch_bills.py
+      - run: |
+          NEWSAPI_KEY=${{ secrets.NEWSAPI_KEY }} \
+          python src/fetch_news.py
+      - run: python src/make_digest.py
+      - run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name  "GH‑Actions Bot"
+          git add data/ digests/
+          git commit -m "Nightly update: $(date -u '+%Y-%m-%d')" || echo "No changes"
+          git push
