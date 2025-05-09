@@ -20,7 +20,7 @@ lines += ["## Bills in Congress", "| Bill | Title | Status | Sponsor |",
           "|------|-------|--------|---------|"]
 for bill in bills["objects"]:
     num  = bill["display_number"]
-    url  = bill["congressdotgov_url"] or bill["link"]
+    url = bill.get("congressdotgov_url") or bill.get("link") or bill["urls"]["govtrack"]
     title= (bill["title"] or "")[:80]
     status = bill["current_status"].replace("_", " ").title()
     sponsor = bill["sponsor"]["name"]
