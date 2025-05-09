@@ -4,7 +4,7 @@ import json, datetime as dt, pathlib, requests, urllib.parse
 TODAY = dt.date.today()
 DATA_DIR = pathlib.Path("data"); DATA_DIR.mkdir(exist_ok=True)
 
-def fetch_govtrack(query="rural health OR critical access OR telehealth", congress=118):
+def fetch_govtrack(query='rural health "critical access" telehealth', congress=118):
     base = "https://www.govtrack.us/api/v2/bill"
     params = {
         "congress": congress,
