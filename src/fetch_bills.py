@@ -7,11 +7,12 @@ DATA_DIR = pathlib.Path("data"); DATA_DIR.mkdir(exist_ok=True)
 def fetch_govtrack(query='rural health "critical access" telehealth', congress=118):
     base = "https://www.govtrack.us/api/v2/bill"
     params = {
-        "congress": congress,
-        "search": query,
-        "sort": "-current_status_date",
-        "limit": 100
-    }
+    "congress": congress,
+    "q": query,                 # <‑‑ MUST be “q”, not “search”
+    "sort": "-current_status_date",
+    "limit": 100
+}
+
     url = f"{base}?{urllib.parse.urlencode(params)}"
     r = requests.get(url, timeout=30)
     r.raise_for_status()
