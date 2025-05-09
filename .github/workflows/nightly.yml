@@ -1,7 +1,12 @@
 name: Nightly rural‑health update
+
+# ↓ ADD THIS BLOCK ↑ near the top (right after "name:" is fine)
+permissions:
+  contents: write        # ← allows the job to push commits
+
 on:
   schedule:
-    - cron: '15 3 * * *'        # 03:15 UTC nightly
+    - cron: '15 3 * * *'
   workflow_dispatch:
 jobs:
   build:
