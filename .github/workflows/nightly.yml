@@ -1,5 +1,3 @@
-name: Nightly rural‑health update
-
 # ↓ ADD THIS BLOCK ↑ near the top (right after "name:" is fine)
 permissions:
   contents: write        # ← allows the job to push commits
@@ -22,6 +20,9 @@ jobs:
           NEWSAPI_KEY=${{ secrets.NEWSAPI_KEY }} \
           python src/fetch_news.py
       - run: python src/make_digest.py
+      # ↓ NEW STEP — converts digest to docs/index.html
+      - name: Build HTML page
+        run: python src/md_to_html.py
       - run: |
           git config --global user.email "action@github.com"
           git config --global user.name  "GH‑Actions Bot"
