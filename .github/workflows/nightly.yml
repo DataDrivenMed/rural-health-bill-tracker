@@ -20,12 +20,13 @@ jobs:
           NEWSAPI_KEY=${{ secrets.NEWSAPI_KEY }} \
           python src/fetch_news.py
       - run: python src/make_digest.py
-      # ↓ NEW STEP — converts digest to docs/index.html
+      
       - name: Build HTML page
         run: python src/md_to_html.py
+
       - run: |
           git config --global user.email "action@github.com"
           git config --global user.name  "GH‑Actions Bot"
-          git add data/ digests/
+          git add data/ digests/ docs/
           git commit -m "Nightly update: $(date -u '+%Y-%m-%d')" || echo "No changes"
           git push
