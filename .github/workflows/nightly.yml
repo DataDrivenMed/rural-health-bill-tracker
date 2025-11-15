@@ -1,0 +1,39 @@
+name: Nightly Rural Bill Tracker
+
+on:
+  workflow_dispatch:      # manual runs
+  schedule:
+    - cron: "0 3 * * *"   # daily at 03:00 UTC
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests
+
+    - name: Fetch rural bills from govinfo
+      run: python src/fetch_bills.py
+
+    - name: Build Markdown digest
+      run: python src/make_digest.py
+
+    - name: Upload data and digest artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: rural-bills-data
+        path: |
+          data/*.json
+          digests/*.md
+          docs/index.md
